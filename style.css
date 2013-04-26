@@ -1,0 +1,54 @@
+.dw-date-picker-context {
+    position: absolute;
+    background-color: white;
+    border: 1px solid black;
+}
+
+.dw-date-picker {
+    width: auto;
+    height: auto;
+}
+
+.dw-date-picker select {
+    width: 90%;
+}
+
+.dw-date-picker td {
+    cursor: pointer;
+}
+
+.dw-date-picker td,
+.dw-date-picker th {
+    border: 1px solid white;
+}
+
+.dw-date-picker thead td,
+.dw-date-picker thead th,
+.dw-date-picker tfoot td,
+.dw-date-picker tfoot th {
+    text-align: center;
+}
+
+.dw-date-picker tbody td {
+    text-align: right;
+}
+
+.dw-date-picker tbody td.dw-selected {
+    background-color: #FFFFBB;
+}
+
+.dw-date-picker td.dw-focus {
+    border: 1px solid gray;
+}
+
+.dw-date-picker tbody td.dw-disabled {
+    color: gray;
+}
+
+.dw-date-picker tbody td.dw-today {
+    color: green;
+}
+
+.dw-date-picker thead .dw-weekend {
+    color: red;
+}
