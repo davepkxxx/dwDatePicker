@@ -39,10 +39,10 @@
                 row = $('<tr dw-month-bar/>');
                 row.appendTo(this._context.find('table > thead'));
                 $('<td colspan="3" dw-month>' + text + '</td>').appendTo(row);
-                $('<td dw-prev-month><</td>').prependTo(row);
-                $('<td dw-next-month>></td>').appendTo(row);
-                $('<td dw-prev-year><<</td>').prependTo(row);
-                $('<td dw-next-year>>></td>').appendTo(row);
+                $('<td dw-prev-month>&#60;</td>').prependTo(row);
+                $('<td dw-next-month>&#62;</td>').appendTo(row);
+                $('<td dw-prev-year>&#60;&#60;</td>').prependTo(row);
+                $('<td dw-next-year>&#62;&#62;</td>').appendTo(row);
 
                 $('tr[dw-month-bar] td').mouseenter(function () {
                     $(this).addClass('dw-focus');
@@ -238,14 +238,14 @@
                 prev = s;
             }
             var result = '';
-            for (var i = 0; i < parts.length; i++) {
-                switch (parts[i]) {
+            for (var j = 0; j < parts.length; j++) {
+                switch (parts[j]) {
                     case 'yyyy':
                         result += date.getFullYear();
                         break;
                     case 'yy':
-                        var s = date.getFullYear() + '';
-                        result += s.substring(s.length < 2 ? 0 : s.length - 2, s.length);
+                        var year = date.getFullYear() + '';
+                        result += year.substring(year.length < 2 ? 0 : year.length - 2, year.length);
                         break;
                     case 'MM':
                         result += this._monthNames[date.getMonth()];
@@ -254,15 +254,15 @@
                         result += this._monthNamesShort[date.getMonth()];
                         break;
                     case 'mm':
-                        var s = date.getMonth() + 1 + '';
-                        result += s.length < 2 ? '0' + s : s;
+                        var month = date.getMonth() + 1 + '';
+                        result += month.length < 2 ? '0' + month : month;
                         break;
                     case 'm':
                         result += date.getMonth() + 1;
                         break;
                     case 'dd':
-                        var s = date.getDate() + 1 + '';
-                        result += s.length < 2 ? '0' + s : s;
+                        var day = date.getDate() + 1 + '';
+                        result += day.length < 2 ? '0' + day : day;
                         break;
                     case 'd':
                         result += date.getDate() + 1;
@@ -274,13 +274,13 @@
                         result += this._dayNames[date.getDay()];
                         break;
                     default:
-                        result += parts[i];
+                        result += parts[j];
                 }
             }
             return result;
         },
-        _operate:function (name, settings, value) {
-            switch (name) {
+        _operate:function (arg0, arg1, arg2) {
+            switch (arg0) {
                 case 'show':
                     this._context.show();
                     break;
@@ -291,18 +291,17 @@
                     this._refresh();
                     break;
                 case 'option':
-                    switch ($.type(settings)) {
+                    switch ($.type(arg1)) {
                         case 'string':
-                            var result = this._options(settings, value);
+                            var result = this._option(arg1, arg2);
                             if (result != undefined) {
                                 return result;
                             }
                             break;
                         case 'object':
-                            this._options(settings);
+                            this._options(arg1);
                             break;
                     }
-                    this.refresh();
                     break;
             }
         },
@@ -320,31 +319,47 @@
             if ($.inArray(name, this._settingNames) > -1) {
                 this['_' + name] = value;
             }
+        },
+        _init:function (tag) {
+            switch (tag.get(0).tagName.toLowerCase()) {
+                case 'input':
+                    this._input = tag;
+                    var content = $('<div style="display: none;" class="dw-date-picker-context"/>');
+                    this._context = content;
+                    content.appendTo($('body'));
+                    content.css('z-index', parseInt(tag.css('z-index')) + 1);
+                    content.offset({
+                        top:tag.offset().top + tag.get(0).offsetHeight,
+                        left:tag.offset().left
+                    });
+                    tag.focus(function () {
+                        content.show();
+                    });
+                    break;
+                case 'div':
+                    this._context = tag;
+                    break;
+            }
         }
     });
 
-    $.fn.dwDatePicker = function (options) {
-        var inst = new dwDatePicker();
-        switch (this.get(0).tagName.toLowerCase()) {
-            case 'input':
-                inst._input = this;
-                inst._context = $('<div style="display: none;" class="dw-date-picker-context"/>');
-                inst._context.appendTo($('body'));
-                inst._context.css('z-index', parseInt(this.css('z-index')) + 1);
-                inst._context.offset({
-                    top:this.offset().top + this.get(0).offsetHeight,
-                    left:this.offset().left
-                });
-                this.focus(function () {
-                    inst._context.show();
-                });
-                break;
-            case 'div':
-                inst._context = this;
-                break;
+    $.fn.dwDatePicker = function (arg0, arg1, arg2) {
+        if (this.length > 1) {
+            this.each(function (i, elem) {
+                $(elem).dwDatePicker(arg0, arg1, arg2);
+            });
+        } else if (this.length > 0) {
+            var inst = this.get(0).dwDatePicker;
+            if (inst == null) {
+                inst = new dwDatePicker();
+                this.get(0).dwDatePicker = inst;
+                inst._init(this);
+                inst._operate('option', arg0, arg1);
+                inst._refresh();
+            } else {
+                inst._operate(arg0, arg1, arg2);
+            }
+            this.dwDatePicker = inst._operate;
         }
-        inst._options(options);
-        inst._refresh();
-        this.dwDatePicker = inst._operate;
     };
 })(jQuery);
