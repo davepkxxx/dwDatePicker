@@ -46,13 +46,56 @@
 <div class="highlight"><pre><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">id=</span><span class="s">"input"</span><span class="nt">/&gt;</span>
 </pre></div>
 
-<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s1">'#input'</span><span class="p">).</span><span class="nx">dwDatePicker</span><span class="p">();</span>
+<p>You can select a date from a popup or inline calendar.</p>
+
+<h4>Initialize dwDatePicker</h4>
+
+<p>.dwDatePicker()
+Normal initialization.</p>
+
+<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s1">'input'</span><span class="p">).</span><span class="nx">dwDatePicker</span><span class="p">();</span>
 </pre></div>
 
-<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"div"</span><span class="nt">/&gt;</span>
+<p>.dwDatePicker(name, value)
+Initialize dwDatePicker and set the value of one option.</p>
+
+<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s1">'input'</span><span class="p">).</span><span class="nx">dwDatePicker</span><span class="p">(</span><span class="s1">'dateFormat'</span><span class="p">,</span> <span class="s1">'dd/mm/yyyy'</span><span class="p">);</span>
 </pre></div>
 
-<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s1">'#div'</span><span class="p">).</span><span class="nx">dwDatePicker</span><span class="p">();</span>
+<p>.dwDatePicker(options)
+Initialize dwDatePicker and set the values of multiple options.</p>
+
+<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s1">'input'</span><span class="p">).</span><span class="nx">dwDatePicker</span><span class="p">(</span><span class="s1">'option'</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">dateFormat</span><span class="o">:</span> <span class="s1">'dd/mm/yyyy'</span>
+<span class="p">});</span>
+</pre></div>
+
+<h4>The getters or setters of options.</h4>
+
+<p>.dwDatePicker('option', name)
+Get the value of one option.</p>
+
+<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s1">'input'</span><span class="p">).</span><span class="nx">dwDatePicker</span><span class="p">(</span><span class="s1">'option'</span><span class="p">,</span> <span class="s1">'dateFormat'</span><span class="p">);</span>
+<span class="nx">$</span><span class="p">(</span><span class="s1">'input'</span><span class="p">).</span><span class="nx">dwDatePicker</span><span class="p">(</span><span class="s1">'option'</span><span class="p">,</span> <span class="s1">'dateFormat'</span><span class="p">,</span> <span class="s1">'yyyy/mm/dd'</span><span class="p">);</span> <span class="c1">// Set the value of one option</span>
+<span class="nx">$</span><span class="p">(</span><span class="s1">'input'</span><span class="p">).</span><span class="nx">dwDatePicker</span><span class="p">(</span><span class="s1">'option'</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">dateFormat</span><span class="o">:</span> <span class="s1">'dd/mm/yyyy'</span><span class="p">,</span>
+  <span class="nx">dateFormat</span><span class="o">:</span> <span class="s1">'dd/mm/yyyy'</span><span class="p">;</span>
+<span class="p">});</span> <span class="c1">// Set the values of multiple options</span>
+</pre></div>
+
+<p>.dwDatePicker('option', name, value)
+Set the value of one option.</p>
+
+<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s1">'input'</span><span class="p">).</span><span class="nx">dwDatePicker</span><span class="p">(</span><span class="s1">'option'</span><span class="p">,</span> <span class="s1">'dateFormat'</span><span class="p">,</span> <span class="s1">'yyyy/mm/dd'</span><span class="p">);</span>
+</pre></div>
+
+<p>.dwDatePicker('option', options)
+Set the values of multiple options.</p>
+
+<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s1">'input'</span><span class="p">).</span><span class="nx">dwDatePicker</span><span class="p">(</span><span class="s1">'option'</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">dateFormat</span><span class="o">:</span> <span class="s1">'dd/mm/yyyy'</span><span class="p">,</span>
+  <span class="nx">dateFormat</span><span class="o">:</span> <span class="s1">'dd/mm/yyyy'</span><span class="p">;</span>
+<span class="p">});</span>
 </pre></div>
 
 <p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
