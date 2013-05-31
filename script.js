@@ -1,72 +1,62 @@
 (function ($, undefined) {
     var dwDatePicker = function () {
+          // the selected date.
         this._selectedDate = null;
+        // The date shown in the calendar.
         this._displayDate = new Date();
+        // Display the calendar area.
         this._context = null;
+        // Calendar of events bound to input box.
         this._input = null;
+        // Full names of the week.
         this._dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        // Short names of the week.
         this._dayNamesShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        // Full names of the month.
         this._monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        // Short names of the month.
         this._monthNamesShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        this._dateFormat = 'yyyy-mm-dd';
+        // The date pattern for format/parse the date.
+        this._datePattern = 'yyyy-mm-dd';
         this._settingNames = ['dateFormat', 'dayNames', 'dayNamesShort', 'monthNames', 'monthNamesShort'];
     };
 
     $.extend(dwDatePicker.prototype, {
+    	  // Validate two dates on the some date.
         _isSomeDate:function (date1, date2) {
             return date1.getDate() == date2.getDate() && date1.getMonth() == date2.getMonth() && date1.getFullYear() == date2.getFullYear();
         },
+        // Refresh the calendar.
         _refresh:function () {
-            if (this._context.find('table[dw-date-picker]').length < 1) {
-                $('<table class="dw-date-picker" dw-date-picker/>').appendTo(this._context);
+            if (this._context.find('.dw-date-picker').length < 1) {
+                $('<div class="dw-date-picker"/>').appendTo(this._context);
             }
-            this._refreshTitle();
+            this._refreshMonthBar();
+            this._refreshDayBar();
             this._refreshDays();
             this._refreshTools();
         },
-        _refreshTitle:function () {
-            if (this._context.find('table[dw-date-picker] > thead').length < 1) {
-                $('<thead/>').appendTo(this._context.find('table[dw-date-picker]'));
-            }
-            this._context.find('table[dw-date-picker] > thead > tr[dw-select-month-bar]').remove();
-            this._refreshMonthBar();
-            this._refreshDayBar();
-        },
+        // Refresh the month bar of the calendar.
         _refreshMonthBar:function () {
             var text = this._monthNames[this._displayDate.getMonth()] + ', ' + this._displayDate.getFullYear();
-            var row = this._context.find('table[dw-date-picker] > thead > tr[dw-month-bar]');
-            if (row.length < 1) {
-                row = $('<tr dw-month-bar/>');
-                row.appendTo(this._context.find('table > thead'));
-                $('<td colspan="3" dw-month>' + text + '</td>').appendTo(row);
-                $('<td dw-prev-month>&#60;</td>').prependTo(row);
-                $('<td dw-next-month>&#62;</td>').appendTo(row);
-                $('<td dw-prev-year>&#60;&#60;</td>').prependTo(row);
-                $('<td dw-next-year>&#62;&#62;</td>').appendTo(row);
+            var parent = this._context.find('.dw-date-picker-panel-title');
 
-                $('tr[dw-month-bar] td').mouseenter(function () {
-                    $(this).addClass('dw-focus');
-                }).mouseleave(function () {
-                        $(this).removeClass('dw-focus');
-                    });
-
+            if (parent.length < 1) {
+                parent = $('<div class="dw-date-picker-panel dw-date-picker-panel-title"/>');
+                parent.appendTo(this._context.find('.dw-date-picker'));
                 var inst = this;
-                row.find('td[dw-month]').click(function () {
-                    return inst._selectMonth();
-                });
-                row.find('td[dw-prev-year]').click(function () {
+
+                var prevYear = $('<div class="dw-date-picker-cell dw-date-picker-cell-title" dw-prev-year><div class="dw-date-picker-cell-text dw-date-picker-cell-text-title">&#60;&#60;</div></div>');
+                prevYear.click(function () {
                     inst._showMonth({
                         year:inst._displayDate.getFullYear() - 1,
                         month:inst._displayDate.getMonth()
                     });
                 });
-                row.find('td[dw-next-year]').click(function () {
-                    inst._showMonth({
-                        year:inst._displayDate.getFullYear() + 1,
-                        month:inst._displayDate.getMonth()
-                    });
-                });
-                row.find('td[dw-prev-month]').click(function () {
+                prevYear.appendTo(parent);
+
+                var prevMonth = $('<div class="dw-date-picker-cell dw-date-picker-cell-title" dw-prev-month><div class="dw-date-picker-cell-text dw-date-picker-cell-text-title">&#60;</div></div>');
+                prevMonth.click(function () {
                     var year = inst._displayDate.getFullYear();
                     var month = inst._displayDate.getMonth();
                     inst._showMonth({
@@ -74,7 +64,12 @@
                         month:month > 0 ? month - 1 : 11
                     });
                 });
-                row.find('td[dw-next-month]').click(function () {
+                prevMonth.appendTo(parent);
+
+                $('<div class="dw-date-picker-cell dw-date-picker-cell-title dw-date-picker-cell-span3" dw-month><div class="dw-date-picker-cell-text dw-date-picker-cell-text-title dw-date-picker-cell-text-span3">' + text + '</div></div>').appendTo(parent);
+                
+                var nextMonth = $('<div class="dw-date-picker-cell dw-date-picker-cell-title" dw-next-month><div class="dw-date-picker-cell-text dw-date-picker-cell-text-title">&#62;</div></div>');
+                nextMonth.click(function () {
                     var year = inst._displayDate.getFullYear();
                     var month = inst._displayDate.getMonth();
                     inst._showMonth({
@@ -82,24 +77,40 @@
                         month:month < 11 ? month + 1 : 0
                     });
                 });
+                nextMonth.appendTo(parent);
+
+                var nextYear = $('<div class="dw-date-picker-cell dw-date-picker-cell-title" dw-next-year><div class="dw-date-picker-cell-text dw-date-picker-cell-text-title">&#62;&#62;</div></div>');
+                nextYear.click(function () {
+                    inst._showMonth({
+                        year:inst._displayDate.getFullYear() + 1,
+                        month:inst._displayDate.getMonth()
+                    });
+                });
+                nextYear.appendTo(parent);
             } else {
-                row.children('td[dw-month]').text(text);
+                parent.find('.dw-date-picker-cell-text-span3').text(text);
             }
         },
+        // Refresh the day bar of the calendar.
         _refreshDayBar:function () {
-            if (this._context.find('table[dw-date-picker] > thead > tr[dw-day-bar]').length < 1) {
-                var row = $('<tr dw-day-bar/>');
-                row.appendTo(this._context.find('table > thead'));
+            var parent = this._context.find('.dw-date-picker-panel-week');
+            if (parent.length < 1) {
+                parent = $('<div class="dw-date-picker-panel dw-date-picker-panel-week"/>');
+                parent.appendTo(this._context.find('.dw-date-picker'));
                 for (var i = 0; i < 7; i++) {
-                    $('<th>' + this._dayNamesShort[i] + '</th>').appendTo(row);
+                    $('<div class="dw-date-picker-cell dw-date-picker-cell-week"><div class="dw-date-picker-cell-text dw-date-picker-cell-text-week">' + this._dayNamesShort[i] + '</div></div>').appendTo(parent);
                 }
-                row.find('th:first, th:last').addClass('dw-weekend');
             }
         },
+        // Refresh the days of the calendar.
         _refreshDays:function () {
-            this._context.find('table[dw-date-picker] > tbody').remove();
-            var body = $('<tbody/>');
-            body.appendTo(this._context.find('table[dw-date-picker]'));
+            var parent = this._context.find('.dw-date-picker-panel-day');
+            if (parent.length < 1) {
+                parent = $('<div class="dw-date-picker-panel dw-date-picker-panel-day"/>');
+                parent.appendTo(this._context.find('.dw-date-picker'));
+            } else {
+                parent.children().remove();
+            }
 
             var date = new Date();
             date.setTime(this._displayDate.getTime());
@@ -108,28 +119,25 @@
             var today = new Date();
 
             do {
-                var row = $('<tr/>');
-                row.appendTo(body);
-
                 for (var j = 0; j < 7; j++) {
-                    var cell = $('<td>' + date.getDate() + '</td>');
+                    var cell = $('<div class="dw-date-picker-cell"><div class="dw-date-picker-cell-text">' + date.getDate() + '</div></div>');
                     if (this._isSomeDate(date, today)) {
-                        cell.addClass('dw-today');
+                        cell.addClass('dw-date-picker-cell-today');
+                        cell.children().addClass('dw-date-picker-cell-text-today');
+                        $('<span class="dw-date-picker-cell-side">Today</span>').appendTo(cell.children());
+                    } else if (this._selectedDate != null && this._isSomeDate(date, this._selectedDate)) {
+                        //cell.addClass('dw-selected');
+                    } else if (date.getMonth() == this._displayDate.getMonth()) {
+                        cell.addClass('dw-date-picker-cell-day');
+                        cell.children().addClass('dw-date-picker-cell-text-day');
+                    } else {
+                        cell.addClass('dw-date-picker-cell-day-disabled');
+                        cell.children().addClass('dw-date-picker-cell-text-day-disabled');
                     }
-                    if (this._selectedDate != null && this._isSomeDate(date, this._selectedDate)) {
-                        cell.addClass('dw-selected');
-                    }
-                    if (date.getMonth() != this._displayDate.getMonth()) {
-                        cell.addClass('dw-disabled');
-                    }
-                    cell.appendTo(row);
+                    cell.appendTo(parent);
 
                     var inst = this;
-                    cell.mouseenter(function () {
-                        $(this).addClass('dw-focus');
-                    }).mouseleave(function () {
-                            $(this).removeClass('dw-focus');
-                        }).click(function (date) {
+                    cell.click(function (date) {
                         var selectedDate = new Date();
                         selectedDate.setTime(date.getTime());
                         return function () {
@@ -149,9 +157,9 @@
                 $('<tfoot/>').appendTo(this._context.find('table[dw-date-picker]'));
                 var toolbar = $('<tr>');
                 toolbar.appendTo($('table[dw-date-picker] > tfoot'));
-                $('<td colspan="3" dw-close> </td>').appendTo(toolbar);
-                $('<td colspan="2" dw-today>Today</td>').prependTo(toolbar);
-                $('<td colspan="2" dw-selected-date>Selected</td>').appendTo(toolbar);
+                $('<td class="dw-date-picker-cell" colspan="3" dw-close><div class="dw-date-picker-cell-text">&nbsp;</div></td>').appendTo(toolbar);
+                $('<td class="dw-date-picker-cell" colspan="2" dw-today><div class="dw-date-picker-cell-text">Today</div></td>').prependTo(toolbar);
+                $('<td class="dw-date-picker-cell" colspan="2" dw-selected-date><div class="dw-date-picker-cell-text">Selected</div></td>').appendTo(toolbar);
                 var inst = this;
 
                 $('td[dw-today]').mouseenter(function () {
@@ -187,7 +195,7 @@
             if (this._context.find('tr[dw-select-month-bar]').length > 0) {
                 this._context.find('tr[dw-select-month-bar]').remove();
             } else {
-                $('<tr dw-select-month-bar><td colspan="3"><select/></td><td>ok</td><td colspan="3"><select/></td></tr>').
+                $('<tr dw-select-month-bar><td class="dw-date-picker-cell" colspan="3"><select/></td><td class="dw-date-picker-cell">ok</td><td class="dw-date-picker-cell" colspan="3"><select/></td></tr>').
                     insertAfter($('tr[dw-month-bar]'));
 
                 var month = this._context.find('tr[dw-select-month-bar] select:first');
@@ -215,7 +223,7 @@
             this._selectedDate = date;
             this._showMonth(date);
             if (this._input != null) {
-                this._input.val(this._formatDate(date, this._dateFormat));
+                this._input.val(this._formatDate(date, this._datePattern));
                 this._context.hide();
             }
         },
@@ -232,8 +240,8 @@
         _formatDate:function (date) {
             var parts = [];
             var prev = null;
-            for (var i = 0; i < this._dateFormat.length; i++) {
-                var s = this._dateFormat.charAt(i);
+            for (var i = 0; i < this._datePattern.length; i++) {
+                var s = this._datePattern.charAt(i);
                 parts.push(prev == s ? parts.pop() + s : s);
                 prev = s;
             }
@@ -338,6 +346,8 @@
                     break;
                 case 'div':
                     this._context = tag;
+                    tag.addClass('dw-date-picker-context');
+                    tag.css('position', 'absolute');
                     break;
             }
         }
