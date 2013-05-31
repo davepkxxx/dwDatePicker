@@ -1,54 +1,148 @@
 .dw-date-picker-context {
-    position: absolute;
-    background-color: white;
-    border: 1px solid black;
-}
-
-.dw-date-picker {
     width: auto;
     height: auto;
 }
 
-.dw-date-picker select {
-    width: 90%;
+.dw-date-picker {
+    padding: 8px 8px 8px;
+    background: #f2efed;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2), inset 0 0 3px rgba(0, 0, 0, 0.3);
+    -webkit-transform: rotateX(15deg);
+    -ms-transform: rotateX(15deg);
+    -o-transform: rotateX(15deg);
+    width: 410px;
 }
 
-.dw-date-picker td {
+.dw-date-picker-panel {
+  padding: 2px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.dw-date-picker-panel-title {
+    background: #4d4d4d;
+}
+
+.dw-date-picker-panel-week {
+}
+
+.dw-date-picker-panel-day {
+    background: #4d4d4d;
+}
+
+.dw-date-picker-cell {
+    font-size: 18px;
+    width: 40px;
+    height: 45px;
+    margin: 2px;
+    border-width: 3px 7px 10px;
+    border-style: solid;
+    border-radius: 4px;
+    float: left;
     cursor: pointer;
 }
 
-.dw-date-picker td,
-.dw-date-picker th {
-    border: 1px solid white;
+.dw-date-picker-cell-text {
+    width: inherit;
+    height: inherit;
+    line-height: 45px;
+    text-indent: 7px;
+    border-radius: 4px;
+    position: relative;
 }
 
-.dw-date-picker thead td,
-.dw-date-picker thead th,
-.dw-date-picker tfoot td,
-.dw-date-picker tfoot th {
+.dw-date-picker-cell-side {
+    font-size: 10px;
+    line-height: 1;
+    display: block;
+    position: absolute;
+    left: 4px;
+    bottom: -10px;
+    -webkit-transform: rotateX(50deg);
+    -moz-transform: rotateX(50deg);
+    -ms-transform: rotateX(50deg);
+    -o-transform: rotateX(50deg);
+    transform: rotateX(50deg);
+}
+
+.dw-date-picker-cell-title {
+    background: #a8aeb8;
+    border-color: #c4c7cc #adb9cc #96a6bd;
+}
+
+.dw-date-picker-cell-text-title {
+    text-align: center;
+    background: #cdd3de;
+    background: -webkit-linear-gradient(left, #bbc3d2, #cdd3de, #bbc3d2);
+    background: -moz-linear-gradient(left, #bbc3d2, #cdd3de, #bbc3d2);
+    background: -ms-linear-gradient(left, #bbc3d2, #cdd3de, #bbc3d2);
+    background: -o-linear-gradient(left, #bbc3d2, #cdd3de, #bbc3d2);
+    background: linear-gradient(left, #bbc3d2, #cdd3de, #bbc3d2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.dw-date-picker-cell-week {
+    border-color: #F2EFED;
+    height: 35px;
+    cursor: default;
+}
+
+.dw-date-picker-cell-text-week {
     text-align: center;
 }
 
-.dw-date-picker tbody td {
-    text-align: right;
+.dw-date-picker-cell-day {
+  background: #d3cfcc;
+  border-color: #ece8e4 #dedad6 #c9c4c4;
 }
 
-.dw-date-picker tbody td.dw-selected {
-    background-color: #FFFFBB;
+.dw-date-picker-cell-text-day {
+    background: #f5f3f1;
+    background: -webkit-linear-gradient(left, #e5e2e1, #f5f3f1, #e5e2e1);
+    background: -moz-linear-gradient(left, #e5e2e1, #f5f3f1, #e5e2e1);
+    background: -ms-linear-gradient(left, #e5e2e1, #f5f3f1, #e5e2e1);
+    background: -o-linear-gradient(left, #e5e2e1, #f5f3f1, #e5e2e1);
+    background: linear-gradient(left, #e5e2e1, #f5f3f1, #e5e2e1);
+    border-color: #ece8e4 #dedad6 #bebe30;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-.dw-date-picker td.dw-focus {
-    border: 1px solid gray;
+.dw-date-picker-cell-day-disabled {
+  background: #d6d65c;
+  border-color: #e4e492 #dddd77 #bebe30;
 }
 
-.dw-date-picker tbody td.dw-disabled {
-    color: gray;
+.dw-date-picker-cell-text-day-disabled {
+    background: #eeeebb;
+    background: -webkit-linear-gradient(left, #e7e7a0, #eeeebb, #e7e7a0);
+    background: -moz-linear-gradient(left, #e7e7a0, #eeeebb, #e7e7a0);
+    background: -ms-linear-gradient(left, #e7e7a0, #eeeebb, #e7e7a0);
+    background: -o-linear-gradient(left, #e7e7a0, #eeeebb, #e7e7a0);
+    background: linear-gradient(left, #e7e7a0, #eeeebb, #e7e7a0);
+    border-color: #e4e492 #dddd77 #bebe30;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-.dw-date-picker tbody td.dw-today {
-    color: green;
+.dw-date-picker-cell-today {
+  background: #39e9a2;
+  border-color: #76f0bf #48eb9a #15b876;
 }
 
-.dw-date-picker thead .dw-weekend {
-    color: red;
+.dw-date-picker-cell-text-today {
+    background: #1ae694;
+    background: -webkit-linear-gradient(left, #a3f5d4, #d1faea, #a3f5d4);
+    background: -moz-linear-gradient(left, #a3f5d4, #d1faea, #a3f5d4);
+    background: -ms-linear-gradient(left, #a3f5d4, #d1faea, #a3f5d4);
+    background: -o-linear-gradient(left, #a3f5d4, #d1faea, #a3f5d4);
+    background: linear-gradient(left, #a3f5d4, #d1faea, #a3f5d4);
+    border-color: #76f0bf #48eb9a #15b876;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.dw-date-picker-cell-span3 {
+    width: 156px;
+}
+
+.dw-date-picker-cell-text-span3 {
 }
